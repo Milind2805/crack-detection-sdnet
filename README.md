@@ -142,6 +142,30 @@ What this suggests:
 - The manual error review was done by **one reviewer on 24 tiles per group**.
 - All data comes from one dataset. The model has not been tested on images from other cameras, regions or surface types, and it should not be used for real structural assessment.
 
+## Demo and API
+
+A small FastAPI service wraps the model. An uploaded photo is cut into non-overlapping 256×256 px tiles, each tile is classified on CPU, and the flagged tiles are outlined in the returned image.
+
+- `GET /` browser demo, `POST /predict` JSON API, `GET /health`, interactive API docs at `/docs`.
+- Two operating points from the evaluation above: `balanced` (threshold 0.666) and `high_recall` (threshold 0.127).
+
+```bash
+# run locally
+pip install -r requirements.txt
+uvicorn app.main:app --port 7860          # then open http://localhost:7860
+
+# or with Docker
+docker build -t crack-detector .
+docker run -p 7860:7860 crack-detector
+
+# call the API
+curl -X POST "http://localhost:7860/predict?mode=high_recall" -F "file=@photo.jpg"
+```
+
+The weights are expected at `weights/crack_effnetb0.pt` (override with the `MODEL_PATH` environment variable). Tests (`python -m pytest`) and a Docker build run on every push through GitHub Actions.
+
+This is a research prototype. The model was trained on SDNET2018 tiles, photos from other cameras, distances or surface types may behave differently, and it must not be used for real structural assessment.
+
 ## Reproducing
 
 1. Download SDNET2018 from Kaggle and unzip it so that `Decks/`, `Pavements/` and `Walls/` (each with `Cracked/` and `Non-cracked/`) are available.
@@ -162,6 +186,10 @@ Environment: Python 3, PyTorch, torchvision, scikit-learn, pandas, Pillow, matpl
 | `loso_pavements_strongaug.csv` | Strong-augmentation rerun on held-out Pavements |
 | `gradcam_errors.png` | Grad-CAM examples of missed cracks and false alarms |
 | `missed_cracks_sheet.png`, `false_alarms_sheet.png` | Contact sheets used for the manual review |
+| `app/` | FastAPI service (`main.py`), tile-wise inference (`model.py`) and the browser demo page |
+| `weights/crack_effnetb0.pt` | Trained EfficientNet-B0 weights |
+| `Dockerfile`, `requirements.txt` | CPU-only container for the service |
+| `tests/`, `.github/workflows/ci.yml` | API tests and the CI workflow |
 
 ## Acknowledgements
 

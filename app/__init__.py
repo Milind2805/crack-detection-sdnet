@@ -1,0 +1,1 @@
+"""Concrete crack detector service."""
