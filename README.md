@@ -4,7 +4,7 @@ A binary classifier that labels 256×256 px concrete tiles as **cracked** or **n
 
 The focus of this project is evaluation you can trust: a leakage-safe split, per-surface results, a leave-one-surface-out generalization test, and an error analysis of what the model gets wrong.
 
-> **Live demo:** _coming soon_
+> **Live demo:** _add the Streamlit app link here_
 
 ## Highlights
 
@@ -144,7 +144,10 @@ What this suggests:
 
 ## Demo and API
 
-A small FastAPI service wraps the model. An uploaded photo is cut into non-overlapping 256×256 px tiles, each tile is classified on CPU, and the flagged tiles are outlined in the returned image.
+The model is served in two ways that share the same inference code (`app/model.py`). An uploaded photo is cut into non-overlapping 256×256 px tiles, each tile is classified on CPU, and the flagged tiles are outlined in the returned image.
+
+- **Hosted demo:** a Streamlit app (`streamlit_demo/streamlit_app.py`) deployed on Streamlit Community Cloud, which is free.
+- **API and container:** a FastAPI service with a Dockerfile. The image is built and the API tests run on every push through GitHub Actions. It is not hosted publicly, because free container hosting with enough memory for PyTorch was not available.
 
 - `GET /` browser demo, `POST /predict` JSON API, `GET /health`, interactive API docs at `/docs`.
 - Two operating points from the evaluation above: `balanced` (threshold 0.666) and `high_recall` (threshold 0.127).
@@ -187,6 +190,7 @@ Environment: Python 3, PyTorch, torchvision, scikit-learn, pandas, Pillow, matpl
 | `gradcam_errors.png` | Grad-CAM examples of missed cracks and false alarms |
 | `missed_cracks_sheet.png`, `false_alarms_sheet.png` | Contact sheets used for the manual review |
 | `app/` | FastAPI service (`main.py`), tile-wise inference (`model.py`) and the browser demo page |
+| `streamlit_demo/` | Streamlit demo app and its dependencies, used for the hosted demo |
 | `weights/crack_effnetb0.pt` | Trained EfficientNet-B0 weights |
 | `Dockerfile`, `requirements.txt` | CPU-only container for the service |
 | `tests/`, `.github/workflows/ci.yml` | API tests and the CI workflow |
