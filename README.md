@@ -4,7 +4,7 @@ A binary classifier that labels 256×256 px concrete tiles as **cracked** or **n
 
 The focus of this project is evaluation you can trust: a leakage-safe split, per-surface results, a leave-one-surface-out generalization test, and an error analysis of what the model gets wrong.
 
-> **Live demo:** _add the Streamlit app link here_
+> **Live demo:** [crack-detection-sdnet-5s6om7brys8vlu2ywnmvbr.streamlit.app](https://crack-detection-sdnet-5s6om7brys8vlu2ywnmvbr.streamlit.app)
 
 ## Highlights
 
