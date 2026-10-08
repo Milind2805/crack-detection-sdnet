@@ -17,7 +17,7 @@ from torchvision import transforms as T
 
 TILE = 256
 MAX_TILES = 200
-PAD_MIN = 64   # leftover edge strips thinner than this are dropped; thicker ones are padded          # cap on tiles per request, keeps CPU latency reasonable
+PAD_MIN = 64   # leftover edge strips thinner than this are dropped; thicker ones are padded         
 BATCH_SIZE = 32
 MEAN, STD = [0.485, 0.456, 0.406], [0.229, 0.224, 0.225]
 
