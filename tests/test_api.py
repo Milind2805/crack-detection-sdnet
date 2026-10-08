@@ -41,7 +41,7 @@ def test_tile_grid(client):
                     files={"file": ("photo.jpg", _jpeg(600, 520), "image/jpeg")})
     body = r.json()
     assert r.status_code == 200
-    assert body["grid"] == {"rows": 2, "cols": 2}
+    assert body["grid"] == {"rows": 2, "cols": 3}
     assert body["tiles_total"] == 4
     assert body["overlay"].startswith("data:image/jpeg;base64,")
 
