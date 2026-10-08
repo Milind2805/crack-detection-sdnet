@@ -37,14 +37,25 @@ def test_single_tile(client):
 
 
 def test_tile_grid(client):
+    # 600 px wide leaves an 88 px strip (>= PAD_MIN, so it is padded into a 3rd column);
+    # 520 px high leaves an 8 px strip (< PAD_MIN, so it is dropped).
     r = client.post("/predict?overlay=true",
                     files={"file": ("photo.jpg", _jpeg(600, 520), "image/jpeg")})
     body = r.json()
     assert r.status_code == 200
     assert body["grid"] == {"rows": 2, "cols": 3}
-    assert body["tiles_total"] == 4
+    assert body["tiles_total"] == 6
     assert body["overlay"].startswith("data:image/jpeg;base64,")
 
+
+def test_thin_edge_strips_are_dropped(client):
+    # 520 = 2*256 + 8 in both directions, so both 8 px strips are dropped
+    r = client.post("/predict",
+                    files={"file": ("photo.jpg", _jpeg(520, 520), "image/jpeg")})
+    body = r.json()
+    assert r.status_code == 200
+    assert body["grid"] == {"rows": 2, "cols": 2}
+    assert body["tiles_total"] == 4
 
 def test_rejects_non_image(client):
     r = client.post("/predict", files={"file": ("x.txt", b"not an image", "text/plain")})
