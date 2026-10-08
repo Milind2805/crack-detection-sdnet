@@ -92,7 +92,7 @@ def prepare_image(img: Image.Image):
 
 @torch.inference_mode()
 def predict_tiles(img: Image.Image) -> np.ndarray:
-    """Return a (rows, cols) array with the crack probability of every full tile."""
+    """Crack Score"""
     net = load_model()
     w, h = img.size
     cols, rows = w // TILE, h // TILE
