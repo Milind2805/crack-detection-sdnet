@@ -71,12 +71,12 @@ if file is not None:
     c1, c2, c3 = st.columns(3)
     c1.metric("Tiles flagged", flagged)
     c2.metric("Tiles analysed", int(probs.size))
-    c3.metric("Highest tile probability", f"{float(probs.max()):.2f}")
+    c3.metric("Highest tile score", f"{float(probs.max()):.2f}", help="Model output between 0 and 1. Higher means more crack-like. It is a ranking score, not a calibrated probability.")
 
     st.image(base64.b64decode(overlay.split(",", 1)[1]), caption="Flagged tiles outlined in red")
     for note in notes:
         st.info(note)
-    with st.expander("Tile probabilities (rows x columns)"):
+    with st.expander("Tile scores (rows x columns)"):
         st.dataframe(np.round(probs, 3))
 
 st.caption(DISCLAIMER)
